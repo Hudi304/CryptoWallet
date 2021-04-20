@@ -1,0 +1,62 @@
+<div class="row">
+  <div class="col-md-12">
+    <!-- IF url != user -->
+    <div *ngIf="router.url !== '/user' && router.url !== '/wallet' && router.url !== '/currency'">
+      <div class="card bg-dark my-5">
+        <!-- <div class="card-body"> -->
+        <h2 class="card-title text-center text-white py-3">{{ title }}</h2>
+        <ul class="text-center list-inline py-3">
+          <li class="list-inline-item">
+            <a routerLink="/login" class="btn btn-info">Login</a>
+          </li>
+          <li class="list-inline-item">
+            <a routerLink="/register" class="btn btn-info">Register</a>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
+
+    <!-- FOR USER -->
+    <div *ngIf="router.url == '/user' || router.url == '/wallet' || router.url == '/currency'">
+
+        <mat-toolbar color="primary">
+      
+          <button mat-icon-button class="example-icon" (click)="goToHome()" aria-label="Example icon-button with menu icon">
+            <mat-icon>home</mat-icon>
+          </button>
+          
+          <span>HriptoWallet</span>
+
+          <span class="example-spacer"></span>
+
+          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon"
+            (click)="goToUserWallet()">
+            <mat-icon>account_balance_wallet</mat-icon>
+          </button>
+
+          <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+            <mat-icon>favorite</mat-icon>
+          </button>
+
+          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+            <mat-icon>share</mat-icon>
+          </button>
+
+          <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon"
+            (click)="goToUserWallet()">
+            <mat-icon>menu</mat-icon>
+          </button>
+
+        </mat-toolbar>
+
+
+    </div>
+
+
+    <router-outlet>
+
+    </router-outlet>
+  </div>
+</div>

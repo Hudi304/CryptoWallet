@@ -1,0 +1,12 @@
+.example-spacer {
+    flex: 1 1 auto;
+  }
+
+  .user-toolbar{
+      color:#212529;
+  }
+
+  .mat-toolbar.mat-primary {
+  background: #007bff;
+  color: #fff;
+}

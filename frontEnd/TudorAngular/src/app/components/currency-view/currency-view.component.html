@@ -1,0 +1,53 @@
+<div style="background: rgb(185, 204, 214);">
+
+
+    <!-- //? GRID LIST -->
+    <mat-grid-list cols="5" rowHeight="10:1">
+        <!-- //? COIN ICON   -->
+        <mat-grid-tile  [colspan]=2 [rowspan]=3>1
+            <button mat-button class = "transparent" (click)="addPoint()">
+                <img src = {{coin.image}} width="100" height="100"> 
+            </button>
+            <font style="text-align:center;" size="30">{{coin.name}} ${{coin.current_price}}</font>
+        </mat-grid-tile>
+
+        
+        <mat-grid-tile  [colspan]=5 [rowspan]=20>
+            <!-- <mat-card   width=100% height=100% box-sizing=border-box;> -->
+            <!-- //? PROGRESS SPINNER -->
+            <div *ngIf="isLoading" style="display: flex; justify-content: center; align-items: center;background: rgb(185, 204, 214);">
+                <mat-progress-spinner color="primary"  mode="indeterminate"></mat-progress-spinner>
+            </div>
+             <!-- //? PRICE CHART -->
+            <ngx-charts-area-chart  *ngIf="!isLoading" 
+                [autoScale]="true"
+                [scheme]="colorScheme"
+                [legend]="legend"
+                [showXAxisLabel]="showXAxisLabel"
+                [showYAxisLabel]="showYAxisLabel"
+                [xAxis]="xAxis"
+                [yAxis]="yAxis"
+                [xAxisLabel]="xAxisLabel"
+                [yAxisLabel]="yAxisLabel"
+                [timeline]="timeline"
+                [results]="tableData"
+                (update)="updateChart()"
+                (select)="onSelect($event)"
+                (activate)="onActivate($event)"
+                >
+            </ngx-charts-area-chart>
+        <!-- </mat-card> -->
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+            <button type="submit" (click)="buy()" class="btn btn-info">Buy</button>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+            <label for="amount">Amount</label>
+            <input type="text" [(ngModel)]="amount" class="form-control" id="amount" name="amount" placeholder="Enter amount" required #email="ngModel" width=10% >
+        </mat-grid-tile>
+    </mat-grid-list>
+
+</div>
+

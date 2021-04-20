@@ -1,0 +1,390 @@
+<!-- <mat-form-field>
+    <mat-label>Selected tab index</mat-label>
+    <input matInput type="number" [formControl]="selected">
+</mat-form-field> -->
+
+<mat-drawer-container class="sideNav">
+
+    <!-- **Slider Table -->
+    <mat-tab-group mat-align-tabs="start" [selectedIndex]="selected.value"
+        (selectedIndexChange)="selected.setValue($event)">
+
+        <!-- **Users Tab -->
+        <mat-tab label="Users">
+            <div class="card my-5">
+                <div class="card-body">
+                    <button type="submit" (click)="addDrawer.toggle()" class=" btn btn-info">
+                        Add User
+                    </button>
+                    <table class="table table-bordered table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let user of users">
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.nickname }}</td>
+                                <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+                                <td><button type="submit" (click)="removeUser(user.nickname)"
+                                        class=" btn btn-info">Remove</button>
+                                </td>
+                                <td><button type="submit" (click)="updateDrawer.toggle(); onUserUpdate(user);"
+                                        class=" btn btn-info">Update</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </mat-tab>
+
+        <!-- **Currencies Tab -->
+        <mat-tab label="Currencies">
+            <div class="card my-5">
+                <div class="card-body">
+                    <button type="submit" (click)="addDrawer.toggle()" class=" btn btn-info">
+                        Add Currencie
+                    </button>
+                    <table class="table table-bordered table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Value in USD</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let currencie of currencies">
+                                <td>{{ currencie.id }}</td>
+                                <td>{{ currencie.name }}</td>
+                                <td>{{ currencie.priceInDollars }}</td>
+                                <td><button type="submit" (click)="removeCurrencie(currencie.id)"
+                                        class=" btn btn-info">Remove</button>
+                                </td>
+                                <td><button type="submit" (click)="updateDrawer.toggle(); onCurrencieUpdate(currencie);"
+                                        class=" btn btn-info">Update</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </mat-tab>
+
+        <!-- **Transactions Tab -->
+        <!-- ! ok probeleme mari -->
+        <mat-tab label="Transactions">
+            <div class="card my-5">
+                <div class="card-body">
+                    <button type="submit" (click)="addDrawer.toggle()" class=" btn btn-info">
+                        Add Transaction
+                    </button>
+                    <table class="table table-bordered table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Currencie</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">From</th>
+                                <th scope="col">To</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let transaction of transactions">
+                                <td>{{ transaction.id }}</td>
+                                <!-- <td>{{ transaction.currencie.name }}</td> -->
+                                <td>{{ transaction.amount }}</td>
+                                <!-- <td>{{ transaction.from.nickname }}</td> -->
+                                <!-- <td>{{ transaction.to.nickname }}</td> -->
+                                <td><button type="submit" (click)="removeTransaction( transaction.id)"
+                                        class=" btn btn-info">Remove</button>
+                                </td>
+                                <td><button type="submit"
+                                        (click)="updateDrawer.toggle(); onTransactionUpdate(transaction);"
+                                        class=" btn btn-info">Update</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </mat-tab>
+
+        <!-- **Admin Tab -->
+        <mat-tab label="Admin">
+            <div class="card my-5">
+                <div class="card-body">
+                    <button type="submit" (click)="addDrawer.toggle()" class=" btn btn-info">
+                        Add Admin
+                    </button>
+                    <table class="table table-bordered table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let admin of admins">
+                                <td>{{ admin.id }}</td>
+                                <td>{{ admin.nickname }}</td>
+                                <td><a href="mailto:{{ admin.email }}">{{ admin.email}}</a></td>
+                                <td>{{ admin.role }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </mat-tab>
+
+    </mat-tab-group>
+
+
+
+
+    <!--** UPDATE Drawer -->
+    <mat-drawer #updateDrawer position="start" mode="side">
+        <mat-card>
+            <div *ngIf="selected.value == '0'  ">
+                <p>Update User</p>
+                <form (ngSubmit)="updateUserAndRefresh()" #userForm="ngForm">
+                    <p>Nickname : {{oldUser.nickname}}</p>
+                    <p>Password : {{oldUser.password}}</p>
+                    <p>Email : {{oldUser.email}}</p>
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" [(ngModel)]="newUser.nickname" class="form-control" id="nickname"
+                            name="nickname" placeholder="Enter your name" required #nickname="ngModel">
+                    </div>
+                    <div [hidden]="!nickname.pristine" class="alert alert-danger">Name is required</div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" [(ngModel)]="newUser.email" class="form-control" id="email" name="email"
+                            placeholder="Enter your email address" required #email="ngModel">
+                        <div [hidden]="!email.pristine" class="alert alert-danger">Email is required</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Password</label>
+                        <input type="text" [(ngModel)]="newUser.password" class="form-control" id="email" name="email"
+                            placeholder="Enter your email address" required #email="ngModel">
+                        <div [hidden]="!email.pristine" class="alert alert-danger">Password is required</div>
+                    </div>
+
+                    <button type="submit" [disabled]="!userForm.form.valid" class="btn btn-info"
+                        (click)="updateUserAndRefresh()">Update</button>
+                </form>
+            </div>
+
+            <div *ngIf="selected.value == '1'  ">
+                <p>Update Currency</p>
+                <form (ngSubmit)="updateCurrencieAndRefresh()" #userForm="ngForm">
+                    <p>Name : {{oldcurrencie.name}}</p>
+                    <p>Value : {{oldcurrencie.priceInDollars}}</p>
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" [(ngModel)]="newUser.nickname" class="form-control" id="nickname"
+                            name="nickname" placeholder="Enter your name" required #nickname="ngModel">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" [(ngModel)]="newUser.email" class="form-control" id="email" name="email"
+                            placeholder="Enter your email address" required #email="ngModel">
+
+                    </div>
+
+                    <button type="submit" [disabled]="!userForm.form.valid" class="btn btn-info"
+                        (click)="updateCurrencieAndRefresh()">Update</button>
+                </form>
+            </div>
+
+            <div *ngIf="selected.value == '2'  ">
+                <p>Update Currency</p>
+                <form (ngSubmit)="updateTransactionAndRefresh()" #userForm="ngForm">
+                    <p>Name : {{oldTransaction.id}}</p>
+                    <!-- <p>Value : {{oldTransaction.currencie.name}}</p> -->
+                    <p>Amount : {{oldTransaction.amount}}</p>
+                    <p>From : {{oldTransaction.from}}</p>
+                    <p>To : {{oldTransaction.from}}</p>
+
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" [(ngModel)]="newUser.nickname" class="form-control" id="nickname"
+                            name="nickname" placeholder="Enter your name" required #nickname="ngModel">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" [(ngModel)]="newUser.email" class="form-control" id="email" name="email"
+                            placeholder="Enter your email address" required #email="ngModel">
+
+                    </div>
+
+                    <button type="submit" [disabled]="!userForm.form.valid" class="btn btn-info"
+                        (click)="updateTransactionAndRefresh()">Update</button>
+                </form>
+            </div>
+        </mat-card>
+    </mat-drawer>
+
+
+
+
+    <!--** ADD Drawer -->
+    <mat-drawer #addDrawer position="end" mode="side">
+        <mat-card>
+
+            <!--** SAVE USER -->
+            <div *ngIf="selected.value == '0'  ">
+                <p>Add User</p>
+                <form #userForm="ngForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" [(ngModel)]="newUser.nickname" class="form-control" id="nickname"
+                            name="nickname" placeholder="Enter your name" required #nickname="ngModel">
+                    </div>
+                    <div [hidden]="!nickname.pristine" class="alert alert-danger">Name is required</div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" [(ngModel)]="newUser.email" class="form-control" id="email" name="email"
+                            placeholder="Enter your email address" required #email="ngModel">
+                        <div [hidden]="!email.pristine" class="alert alert-danger">Email is required</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Password</label>
+                        <input type="text" [(ngModel)]="newUser.password" class="form-control" id="email" name="email"
+                            placeholder="Enter your email address" required #email="ngModel">
+                        <div [hidden]="!email.pristine" class="alert alert-danger">Password is required</div>
+                    </div>
+
+                    <button type="submit" [disabled]="!userForm.form.valid" class="btn btn-info"
+                        (click)="saveUserAndRefresh()">Save
+                        User</button>
+                </form>
+            </div>
+
+            <!--** SAVE CURRENCIE -->
+            <div *ngIf="selected.value == '1'  ">
+                <p>Add Currencie</p>
+                <form #userForm="ngForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" [(ngModel)]="newcurrencie.name" class="form-control" id="nickname"
+                            name="nickname" placeholder="Enter currencie name " required #nickname="ngModel">
+                    </div>
+                    <!-- <div [hidden]="!nickname.pristine" class="alert alert-danger">Name is required</div> -->
+
+                    <div class="form-group">
+                        <label for="email">Value in USD</label>
+                        <input type="text" [(ngModel)]="newcurrencie.priceInDollars" class="form-control"
+                            id="priceInDollars" name="priceInDollars" placeholder="Enter the value" required
+                            #email="ngModel">
+                        <!-- <div [hidden]="!priceInDollars.pristine" class="alert alert-danger">Value is required</div> -->
+                    </div>
+
+                    <button type="submit" [disabled]="!userForm.form.valid" class="btn btn-info"
+                        (click)="saveCurrencieAndRefresh()">Save Currencie</button>
+                </form>
+            </div>
+
+            <!--** SAVE TRANSACTION -->
+            <div *ngIf="selected.value == '2'  ">
+                <p>Add Transaction</p>
+                <form #userForm="ngForm">
+                    <div class="form-group">
+                        <label for="name">Currencie</label>
+                        <input type="text" [(ngModel)]="newUser.nickname" class="form-control" id="nickname"
+                            name="nickname" placeholder="Enter currencie name " required #nickname="ngModel">
+                    </div>
+                    <!-- <div [hidden]="!nickname.pristine" class="alert alert-danger">Name is required</div> -->
+
+                    <div class="form-group">
+                        <label for="email">Value in USD</label>
+                        <input type="text" [(ngModel)]="newcurrencie.priceInDollars" class="form-control"
+                            id="priceInDollars" name="priceInDollars" placeholder="Enter the value" required
+                            #email="ngModel">
+                        <!-- <div [hidden]="!priceInDollars.pristine" class="alert alert-danger">Value is required</div> -->
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Amount</label>
+                        <input type="text" [(ngModel)]="newcurrencie.priceInDollars" class="form-control"
+                            id="priceInDollars" name="priceInDollars" placeholder="Enter the value" required
+                            #email="ngModel">
+                        <!-- <div [hidden]="!priceInDollars.pristine" class="alert alert-danger">Value is required</div> -->
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">From</label>
+                        <input type="text" [(ngModel)]="newcurrencie.priceInDollars" class="form-control"
+                            id="priceInDollars" name="priceInDollars" placeholder="Enter the value" required
+                            #email="ngModel">
+                        <!-- <div [hidden]="!priceInDollars.pristine" class="alert alert-danger">Value is required</div> -->
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">To</label>
+                        <input type="text" [(ngModel)]="newcurrencie.priceInDollars" class="form-control"
+                            id="priceInDollars" name="priceInDollars" placeholder="Enter the value" required
+                            #email="ngModel">
+                        <!-- <div [hidden]="!priceInDollars.pristine" class="alert alert-danger">Value is required</div> -->
+                    </div>
+
+                    <button type="submit" [disabled]="!userForm.form.valid" class="btn btn-info"
+                        (click)="saveTransitionAndRefresh()">Save Transaction</button>
+                </form>
+            </div>
+
+
+            <!--** SAVE Admin -->
+            <div *ngIf="selected.value == '3'  ">
+                <p>Add Admin</p>
+                <form #userForm="ngForm">
+
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" [(ngModel)]="newAdmin.nickname" class="form-control" id="nickname"
+                            name="name" placeholder="Enter new name" required #nickname="ngModel">
+                    </div>
+                    <div [hidden]="!nickname.pristine" class="alert alert-danger">Name is required</div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" [(ngModel)]="newAdmin.email" class="form-control" id="email" name="email"
+                            placeholder="Enter email address" required #email="ngModel">
+                        <div [hidden]="!email.pristine" class="alert alert-danger">Email is required</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="text" [(ngModel)]="newAdmin.password" class="form-control" id="password"
+                            name="password" placeholder="Enter password address" required #password="ngModel">
+                        <div [hidden]="!password.pristine" class="alert alert-danger">Password is required</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <input type="text" [(ngModel)]="newAdmin.role" class="form-control" id="role" name="role"
+                            placeholder="Enter role" required #role="ngModel">
+                        <div [hidden]="!role.pristine" class="alert alert-danger">Role is required</div>
+                    </div>
+
+                    <button [disabled]="!userForm.form.valid" class="btn btn-info" (click)="saveAdminAndRefresh()">Save
+                        Admin</button>
+                </form>
+            </div>
+
+
+        </mat-card>
+    </mat-drawer>
+
+</mat-drawer-container>

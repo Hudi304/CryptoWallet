@@ -1,0 +1,9 @@
+.hide {
+    opacity: 0;
+  }
+
+  .transparent{
+    display:inline-block;
+    width: 80px;
+    height: 40px;
+}

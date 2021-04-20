@@ -1,0 +1,151 @@
+<div class="card-body">
+    <mat-accordion>
+        <mat-expansion-panel hideToggle>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Portofolio
+                </mat-panel-title>
+
+                <mat-panel-description>
+                    A list of all you own and their apreciation
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            
+            
+            <div *ngIf="!isLoading" class="card-body">
+                <table class="table table-bordered table-striped">
+                    
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Aq Price</th>
+                            <th scope="col">Current Price </th>
+                        
+                            <th scope="col">Amount</th>
+                            <th scope="col">Profit</th>
+                            <th scope="col">Total Amount</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <tr *ngFor="let tran of totalTransactions">
+                            <td > {{ tran.coinName }} </td>
+                            <td>${{ tran.aquisitionPrice.toLocaleString("en-CA")  }} </td>
+                            <td>${{ tran.currentPrice.toLocaleString("en-CA")  }} </td>
+                            
+                            <td> {{ tran.amount.toLocaleString("en-CA") }} </td>
+                            <td [ngStyle]="{'color': tran.makingProfit? 'red' : 'green'}" >${{ ((tran.currentPrice - tran.aquisitionPrice)*tran.amount).toLocaleString("en-CA")  }} </td>                     
+                            <td>${{(tran.amount * tran.aquisitionPrice).toLocaleString("en-CA") }} </td>
+                        </tr>
+                    </tbody>
+                    
+                </table>
+            </div>
+        </mat-expansion-panel>
+
+
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel-header>
+                
+                <mat-panel-title>
+                    All Transactions
+                </mat-panel-title>
+
+                <mat-panel-description>
+                    Currently I am {{panelOpenState ? 'open' : 'closed'}}
+                </mat-panel-description>
+
+            </mat-expansion-panel-header>
+
+            <div *ngIf="!isLoading" class="card-body">
+                <table class="table table-bordered table-striped">
+                    
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Aq Price</th>
+                            <th scope="col">Current Price </th>
+                            
+                            <th scope="col">Amount</th>
+                            <th scope="col">Profit</th>
+                            <th scope="col">Total Amount</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <tr *ngFor="let tran of transactions">
+                            <td > {{ tran.coinName }} </td>
+                            <td>${{ tran.aquisitionPrice.toLocaleString("en-CA")  }} </td>
+                            
+                            <td *ngIf="tran.currentPrice!">
+                                ${{ tran.currentPrice.toLocaleString("en-CA")  }} 
+                            </td>
+                            
+                            <td> {{ tran.amount.toLocaleString("en-CA") }} </td>
+                            
+                            <td [ngStyle]="{'color': tran.makingProfit? 'red' : 'green'}" >
+                                ${{ ((tran.currentPrice - tran.aquisitionPrice)*tran.amount).toLocaleString("en-CA")  }} 
+                            </td>
+
+                            <td>${{(tran.amount * tran.aquisitionPrice).toLocaleString("en-CA") }} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+
+
+
+  <!-- //? ------- Tabelul de jos  -->
+
+<div *ngIf="isLoading; else elseBlock" style="display: flex; justify-content: center; align-items: center; background: rgb(53, 51, 51);">
+    <mat-progress-spinner color="primary"  mode="indeterminate"></mat-progress-spinner>
+</div>
+
+<ng-template #elseBlock>
+    <div *ngIf="!isLoading" class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Aq Price</th>
+                    <th scope="col">Current Price </th>
+                
+                    <th scope="col">Amount</th>
+                    <th scope="col">Profit</th>
+                    <th scope="col">Total Amount</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <tr *ngFor="let tran of transactions">
+                    <td > {{ tran.coinName }} </td>
+                    <td>
+                        ${{ tran.aquisitionPrice.toLocaleString("en-CA") }} 
+                    </td>
+                    <td *ngIf="tran.currentPrice != undefined; else elseBlock">
+                        ${{ tran.currentPrice.toLocaleString("en-CA") }}
+                    </td>
+                    <ng-template #elseBlock>
+                        ------
+                    </ng-template>
+                
+                    <td> {{ tran.amount.toLocaleString("en-CA") }} </td>
+                    <td [ngStyle]="{'color': tran.isMakingProfit ? 'green' : 'red' }" >${{ ((tran.currentPrice - tran.aquisitionPrice)*tran.amount).toLocaleString("en-CA")  }} </td>
+                    <ng-template #elseBlock>Content to render when condition is false.</ng-template>
+                    <td>${{(tran.amount * tran.aquisitionPrice).toLocaleString("en-CA") }} </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+    
+</ng-template>
+
+
+
+
+
+
+

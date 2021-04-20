@@ -1,0 +1,57 @@
+<div class="card my-5">
+    <div class="card-body">
+        <!-- <button type="submit" (click)="addDrawer.toggle()" class=" btn btn-info">
+            Add Currencie
+        </button> -->
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">USD</th>
+                    <th scope="col">MarketCap</th>
+
+                    <th scope="col">MarketCap Change 24h</th>
+                    <th scope="col">MarketCap Change %</th>
+                    <!-- <th scope="col">FullyDilutedVal</th> -->
+                    <th scope="col">TotalVolume</th>
+                    <th scope="col">High 24h</th>
+                    
+                    <th scope="col">Low 24h</th>
+                    <th scope="col">Price Change 24h</th>
+                    <th scope="col">Price Change %</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let coin of coinsInfo">
+                    <td width = "70">{{ coin.market_cap_rank }}</td>
+                    <td width = "250">
+                        <button mat-button class = "transparent" (click)="goToCurrencyView(coin)">
+                            <img src = {{coin.image}} width="32" height="32"> {{coin.name}} [{{coin.symbol}}]
+                        </button>
+                        </td>
+                    <td width = 100>${{ coin.current_price }}</td>
+                    <td>${{ coin.market_cap.toLocaleString("en-CA") }}</td>
+
+                    <td [ngStyle]="{'color': coin.market_cap_change_24h < 0? 'red' : 'lime'}">
+                        ${{ coin.market_cap_change_24h.toLocaleString("en-CA") }}
+                    </td>
+                    <td [ngStyle]="{'color': coin.market_cap_change_percentage_24h < 0? 'red' : 'lime'}">
+                        {{ coin.market_cap_change_percentage_24h }}%
+                    </td>
+                    <!-- <td>{{ coin.fully_diluted_valuation }}</td> -->
+                    <td>${{ coin.total_volume.toLocaleString("en-CA") }}</td>
+                    <td>${{ coin.high_24h.toLocaleString("en-CA") }}</td>
+
+                    <td>${{ coin.low_24h.toLocaleString("en-CA") }}</td>
+                    <td [ngStyle]="{'color': coin.price_change_24h < 0? 'red' : 'lime'}">
+                        ${{ coin.price_change_24h.toLocaleString("en-CA") }}
+                    </td>
+                    <td [ngStyle]="{'color': coin.price_change_percentage_24h < 0? 'red' : 'lime'}">
+                        {{ coin.price_change_percentage_24h.toLocaleString("en-CA") }}%
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
