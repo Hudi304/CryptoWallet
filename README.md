@@ -1,6 +1,8 @@
 # CryptoWallet
 This is a small project that I made in university.
 
+## Don't be fooled this app does not interact with anything blockchain related excepting the CoinGecko API.
+
 It's a SpringBoot back end with an Angular front end.
 
 The idea behind this app was to be able explore the evolution of Cryptocurrencies and to 'invest' using fictive money.
